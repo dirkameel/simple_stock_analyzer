@@ -1,110 +1,84 @@
-# Stock Data Analysis Tool in Go
+## Stock Data Analyzer - Go Implementation
 
-A simple Go application for analyzing stock data and calculating technical indicators, particularly Simple Moving Averages (SMA).
+This is a Go implementation of a stock data analyzer that calculates simple moving averages from CSV stock data.
 
-## Features
+### Prerequisites
 
-- **Simple Moving Average (SMA)** calculation with customizable window sizes
-- **Basic trading signals** (BUY/SELL/HOLD) based on price vs SMA position
-- **Advanced technical analysis** including:
-  - Bollinger Bands
-  - Relative Strength Index (RSI)
-  - Standard deviation
-- **CSV data parsing** for stock price data
-- **Sample data generator** for testing
+- Go 1.16 or higher installed on your system
 
-## Requirements
+### Installation
 
-- Go 1.21 or later
+1. Clone or download the project files
+2. Navigate to the project directory
+3. The `go.mod` file is already included for module support
 
-## Installation
+### Usage
 
-1. Clone or download the source files
-2. Ensure all files are in the same directory
-3. Run `go mod tidy` to initialize the module
+1. **Prepare your stock data CSV file**:
+   - Format: `Date,Close` (header required)
+   - One data point per line
+   - See `stock_data.csv` for example format
 
-## Usage
+2. **Run the analyzer**:
+   ```bash
+   go run main.go data_reader.go moving_average.go display.go stock_data.csv 5
+   ```
 
-### Basic Usage
+   Where:
+   - `stock_data.csv` is your input file
+   - `5` is the moving average window size
+
+### Example Output
+
+```
+Date         Close      Moving Average
+-------------------------------------
+2024-01-01   100.50     N/A
+2024-01-02   102.25     N/A
+2024-01-03   101.75     N/A
+2024-01-04   103.00     N/A
+2024-01-05   104.50     102.40
+2024-01-06   103.25     102.95
+2024-01-07   105.00     103.50
+2024-01-08   106.25     104.60
+2024-01-09   107.50     105.50
+2024-01-10   108.00     106.00
+
+Summary: 10 data points processed, 6 moving averages calculated
+```
+
+### Features
+
+- **CSV Data Reading**: Reads stock data from CSV files with date and closing price
+- **Simple Moving Average**: Calculates SMA for specified window size
+- **Error Handling**: Robust error handling for file operations and data parsing
+- **Formatted Output**: Clean, tabular display of results
+- **Input Validation**: Validates window size and data sufficiency
+
+### File Structure
+
+- `main.go` - Entry point and command-line interface
+- `data_reader.go` - CSV file reading and parsing
+- `moving_average.go` - Moving average calculation logic
+- `display.go` - Results formatting and display
+- `go.mod` - Go module definition
+
+### Building
+
+To create an executable binary:
 
 ```bash
-# Analyze a CSV file with default 20-day SMA
-go run main.go stock_data.csv
-
-# Analyze with custom window size (e.g., 50-day SMA)
-go run main.go stock_data.csv 50
+go build -o stockanalyzer
+./stockanalyzer stock_data.csv 5
 ```
 
-### CSV Format
+### Error Handling
 
-The CSV file should have the following columns:
-```
-Date,Open,High,Low,Close,Volume
-2024-01-01,100.0,102.5,99.5,101.2,1000000
-2024-01-02,101.5,103.0,100.5,102.8,1200000
-...
-```
+The program handles various error conditions:
+- Missing or invalid command-line arguments
+- File not found or unreadable
+- Invalid CSV format
+- Insufficient data for moving average calculation
+- Invalid window size
 
-### Generating Sample Data
-
-To test the application, you can use the included sample data generator:
-
-```go
-// Add this to main function temporarily to generate sample data
-func main() {
-    // ... existing code ...
-    
-    // Uncomment to generate sample data
-    // if err := GenerateSampleData(); err != nil {
-    //     log.Fatalf("Error generating sample data: %v", err)
-    // }
-    // fmt.Println("Sample data generated: sample_stock_data.csv")
-}
-```
-
-## Output
-
-The application provides:
-- Daily SMA calculations with trading signals
-- Summary statistics (total signals, buy/sell/hold counts)
-- Latest trading signal
-- Advanced technical indicators (Bollinger Bands, RSI)
-
-## File Structure
-
-- `main.go` - Main application entry point and core logic
-- `go.mod` - Go module definition
-- `sample_data.go` - Sample data generator for testing
-- `analysis.go` - Advanced technical analysis functions
-
-## Trading Signals
-
-- **BUY**: When closing price crosses above SMA
-- **SELL**: When closing price crosses below SMA  
-- **HOLD**: When price is close to SMA or no clear trend
-
-## Example Output
-
-```
-Stock Data Analysis - Simple Moving Average Calculator
-======================================================
-Analyzing file: sample_stock_data.csv with window size: 20
-
-Simple Moving Average (SMA-20) Results:
-Date                    Price           SMA             Signal
-----                    -----           ---             ------
-2024-01-20      121.20          113.55          BUY
-2024-01-21      122.50          114.40          BUY
-...
-
-=== ANALYSIS SUMMARY ===
-Total data points with SMA: 6
-Buy signals: 6
-Sell signals: 0
-Hold signals: 0
-
-Latest signal (2024-01-25): BUY
-Price: 126.80, SMA: 116.13
-```
-
-This Go implementation provides a robust, type-safe alternative to Python for stock data analysis with better performance and compile-time error checking.
+This implementation provides a robust, efficient solution for stock data analysis with moving averages in Go.
