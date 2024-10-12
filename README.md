@@ -1,84 +1,106 @@
-## Stock Data Analyzer - Go Implementation
+# Stock Data Analyzer - Go Implementation
 
-This is a Go implementation of a stock data analyzer that calculates simple moving averages from CSV stock data.
+A simple Go application that analyzes stock data and calculates Simple Moving Averages (SMA).
 
-### Prerequisites
+## Features
 
-- Go 1.16 or higher installed on your system
+- Load stock data from CSV files
+- Calculate Simple Moving Averages (5, 10, 20 days)
+- Generate basic stock analysis reports
+- Generate sample data for testing
 
-### Installation
+## Requirements
 
-1. Clone or download the project files
-2. Navigate to the project directory
-3. The `go.mod` file is already included for module support
+- Go 1.16 or higher
 
-### Usage
+## Usage
 
-1. **Prepare your stock data CSV file**:
-   - Format: `Date,Close` (header required)
-   - One data point per line
-   - See `stock_data.csv` for example format
+### 1. Using Sample Data
 
-2. **Run the analyzer**:
-   ```bash
-   go run main.go data_reader.go moving_average.go display.go stock_data.csv 5
-   ```
-
-   Where:
-   - `stock_data.csv` is your input file
-   - `5` is the moving average window size
-
-### Example Output
-
-```
-Date         Close      Moving Average
--------------------------------------
-2024-01-01   100.50     N/A
-2024-01-02   102.25     N/A
-2024-01-03   101.75     N/A
-2024-01-04   103.00     N/A
-2024-01-05   104.50     102.40
-2024-01-06   103.25     102.95
-2024-01-07   105.00     103.50
-2024-01-08   106.25     104.60
-2024-01-09   107.50     105.50
-2024-01-10   108.00     106.00
-
-Summary: 10 data points processed, 6 moving averages calculated
-```
-
-### Features
-
-- **CSV Data Reading**: Reads stock data from CSV files with date and closing price
-- **Simple Moving Average**: Calculates SMA for specified window size
-- **Error Handling**: Robust error handling for file operations and data parsing
-- **Formatted Output**: Clean, tabular display of results
-- **Input Validation**: Validates window size and data sufficiency
-
-### File Structure
-
-- `main.go` - Entry point and command-line interface
-- `data_reader.go` - CSV file reading and parsing
-- `moving_average.go` - Moving average calculation logic
-- `display.go` - Results formatting and display
-- `go.mod` - Go module definition
-
-### Building
-
-To create an executable binary:
+The easiest way to get started is to use the included sample data generator:
 
 ```bash
-go build -o stockanalyzer
-./stockanalyzer stock_data.csv 5
+# Make the script executable (Unix/Linux/Mac)
+chmod +x run_example.sh
+
+# Run the example
+./run_example.sh
 ```
 
-### Error Handling
+### 2. Using Your Own Data
 
-The program handles various error conditions:
-- Missing or invalid command-line arguments
-- File not found or unreadable
-- Invalid CSV format
-- Insufficient data for moving average calculation
-- Invalid window size
+Prepare a CSV file with the following columns:
+- Date (YYYY-MM-DD)
+- Open
+- High  
+- Low
+- Close
+- Volume
 
-This implementation provides a robust, efficient solution for stock data analysis with moving averages in Go.
+Example CSV format:
+```csv
+Date,Open,High,Low,Close,Volume
+2023-01-01,100.50,102.30,99.80,101.20,1500000
+2023-01-02,101.30,103.10,100.50,102.80,1600000
+```
+
+Run the analyzer with your CSV file:
+```bash
+go run main.go your_stock_data.csv
+```
+
+### 3. Generate Sample Data
+
+If you want to generate sample data separately:
+
+```bash
+go run data_generator.go main.go
+```
+
+## Output
+
+The program will display:
+- 5, 10, and 20-day Simple Moving Averages
+- Last 10 days of SMA calculations for each period
+- Basic stock analysis including price changes and high/low statistics
+
+## Building
+
+To build an executable:
+
+```bash
+go build -o stock-analyzer main.go data_generator.go
+./stock-analyzer sample_stock_data.csv
+```
+
+## CSV Format Requirements
+
+Your CSV file must have this exact header:
+```
+Date,Open,High,Low,Close,Volume
+```
+
+Dates should be in `YYYY-MM-DD` format, and all price values should be numeric.
+
+## Example Output
+
+```
+Stock Data Analyzer - Simple Moving Average Calculator
+======================================================
+Loaded 90 days of stock data
+
+=== 5-Day Simple Moving Average ===
+2024-01-15: Close: $105.30, SMA5: $104.82
+2024-01-16: Close: $106.10, SMA5: $105.44
+...
+
+=== Stock Analysis Report ===
+Analysis Period: 2023-10-18 to 2024-01-15
+Price Change: $5.30 (5.30%)
+Latest Price: $105.30
+52-Week High: $108.50
+52-Week Low: $95.20
+Current vs High: 2.95% below high
+```
+
+This Go implementation provides a fast, compiled alternative to Python for stock data analysis with similar functionality for calculating moving averages and basic technical analysis.
